@@ -24,6 +24,7 @@ namespace Auth0WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
             services.AddAuthentication(options =>
             {
@@ -45,6 +46,15 @@ namespace Auth0WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Shows UseCors with CorsPolicyBuilder.
+            app.UseCors(builder =>
+                // Auth0:ApiIdentifier
+                // "http://localhost:4200"
+                builder.WithOrigins(Configuration["Cors:Origin"], Configuration["Cors:DevlopmentOrigin"], "")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                );
 
             app.UseAuthentication();
 
