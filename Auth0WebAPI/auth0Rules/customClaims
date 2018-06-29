@@ -10,6 +10,12 @@ function (user, context, callback) {
       return !gender;
     });
   }
+  if(!gender) {
+    gender = user.user_metadata &&
+    user.user_metadata.fullcontact &&
+    user.user_metadata.fullcontact.demographics &&
+    user.user_metadata.fullcontact.demographics.gender;
+  }
   var googleConnections = user.user_metadata && user.user_metadata.googleConnections;
   
   const namespace = 'https://pizza42.azurewebsites.net';
