@@ -1,0 +1,21 @@
+function (user, context, callback) {
+  // TODO: implement your rule  
+  var gender = user.gender;
+  
+  if(!gender) {
+    (user.identities || []).every((identity) => {
+      if (identity.profileData && identity.profileData.gender) {
+        gender = identity.profileData.gender;
+      }
+      return !gender;
+    });
+  }
+  var googleConnections = user.user_metadata && user.user_metadata.googleConnections;
+  
+  const namespace = 'https://pizza42.azurewebsites.net';
+  context.idToken['user.gender'] = gender;
+  context.idToken['google.Connections'] = googleConnections;
+  context.idToken[namespace + 'gender'] = gender;
+  context.idToken[namespace + 'googleConnections'] = googleConnections;
+  callback(null, user, context);
+}
